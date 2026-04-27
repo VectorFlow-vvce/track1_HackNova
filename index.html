@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeLink - Ultimate Emergency Lifesaver</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="voice-toggle">
+            <button id="voiceBtn" class="voice-btn">
+                <i class="fas fa-microphone"></i>
+                <span id="voiceStatus">Voice ON</span>
+            </button>
+        </div>
+        <div class="lang-selector">
+            <select id="languageSelect">
+                <option value="en">🇮🇳 English</option>
+                <option value="hi">🇮🇳 हिंदी</option>
+                <option value="kn">🇮🇳 ಕನ್ನಡ</option>
+            </select>
+        </div>
+        <div class="battery" id="batteryInfo">
+            <i class="fas fa-battery-full"></i>
+            <span>100%</span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <h1 id="mainTitle">LifeLink</h1>
+            <p id="tagline" class="tagline">India's #1 Emergency Lifesaver - 24×7 Help</p>
+            <div class="stats">
+                <span class="stat-item">🩸 5000+ Donors</span>
+                <span class="stat-item">🏥 200+ Hospitals</span>
+                <span class="stat-item">🚑 100+ Ambulances</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboard -->
+    <div class="dashboard">
+        <div class="emergency-card sos-card" onclick="sendSOS()">
+            <div class="emergency-icon"><i class="fas fa-exclamation-triangle"></i></div>
+            <h3 class="card-title" id="sosTitle">🚨 SOS Emergency</h3>
+            <p class="card-desc" id="sosDesc">Instant alert to 5 nearest hospitals + ambulance</p>
+        </div>
+
+        <div class="feature-card hospital-card" onclick="openHospitalModal()">
+            <div class="feature-icon"><i class="fas fa-hospital"></i></div>
+            <h3 class="card-title" id="hospitalTitle">🏥 Hospitals</h3>
+            <p class="card-desc" id="hospitalDesc">Nearest 24×7 hospitals & trauma centers</p>
+        </div>
+
+        <div class="feature-card blood-card" onclick="openBloodModal()">
+            <div class="feature-icon"><i class="fas fa-tint"></i></div>
+            <h3 class="card-title" id="bloodTitle">🩸 Blood Bank</h3>
+            <p class="card-desc" id="bloodDesc">5000+ verified donors nearby</p>
+        </div>
+
+        <div class="feature-card cpr-card" onclick="openCPRGuide()">
+            <div class="feature-icon"><i class="fas fa-heartbeat"></i></div>
+            <h3 class="card-title" id="cprTitle">❤️ CPR Guide</h3>
+            <p class="card-desc" id="cprDesc">Step-by-step emergency instructions</p>
+        </div>
+
+        <div class="feature-card medicine-card" onclick="openMedicineModal()">
+            <div class="feature-icon"><i class="fas fa-pills"></i></div>
+            <h3 class="card-title" id="medicineTitle">💊 Medicine</h3>
+            <p class="card-desc" id="medicineDesc">24×7 pharmacies & medicine delivery</p>
+        </div>
+
+        <div class="feature-card pulse-card" onclick="checkPulse()">
+            <div class="feature-icon"><i class="fas fa-heart-pulse"></i></div>
+            <h3 class="card-title" id="pulseTitle">💓 Pulse Check</h3>
+            <p class="card-desc" id="pulseDesc">Check pulse using camera</p>
+        </div>
+    </div>
+
+    <!-- CPR Modal - PERFECTLY FIXED -->
+    <div id="cprModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('cprModal')">&times;</span>
+            <h2 id="cprModalTitle">Emergency CPR Guide</h2>
+            <div id="cprSteps" class="cpr-steps">
+                <div style="text-align:center;padding:60px;color:rgba(255,255,255,0.7);">
+                    <i class="fas fa-heartbeat" style="font-size:4em;margin-bottom:20px;animation:pulse 1.5s infinite;"></i>
+                    <h3>Loading CPR Guide...</h3>
+                </div>
+            </div>
+            <button onclick="speakCPR()" class="speak-btn" id="speakCPRBtn">🔊 Read Aloud</button>
+        </div>
+    </div>
+
+    <!-- Hospital Modal -->
+    <div id="hospitalModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('hospitalModal')">&times;</span>
+            <h2 id="hospitalModalTitle">Nearest Hospitals (24×7)</h2>
+            <div class="search-box">
+                <input type="text" id="hospitalSearch" placeholder="🔍 Search hospitals (Apollo, Narayana...)">
+            </div>
+            <div id="hospitalResults" class="results-list">
+                <div style="text-align:center;padding:60px;color:rgba(255,255,255,0.7);">
+                    <i class="fas fa-hospital" style="font-size:4em;margin-bottom:20px;"></i>
+                    <h3>Click to load hospitals</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blood Modal -->
+    <div id="bloodModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('bloodModal')">&times;</span>
+            <h2 id="bloodModalTitle">Find Blood Donors</h2>
+            <div class="form-group">
+                <select id="bloodGroup">
+                    <option value="">Select Blood Group</option>
+                    <option value="A+">A+ (Universal Donor)</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+ (Universal Receiver)</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O- (Universal Donor)</option>
+                </select>
+                <input type="number" id="distance" placeholder="Max Distance (km)" min="1" max="100" value="10">
+                <button onclick="findDonors()" id="findBtn">🔍 Find Donors Now</button>
+            </div>
+            <div id="donorResults" class="results-list">
+                <div style="text-align:center;padding:60px;color:rgba(255,255,255,0.7);">
+                    <i class="fas fa-search" style="font-size:4em;margin-bottom:20px;"></i>
+                    <h3>Select blood group & click Find</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Medicine Modal -->
+    <div id="medicineModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('medicineModal')">&times;</span>
+            <h2 id="medicineModalTitle">24×7 Pharmacies</h2>
+            <div class="form-group">
+                <input type="text" id="medicineSearch" placeholder="Medicine name or Pharmacy..." onkeyup="searchMedicine()">
+                <button onclick="findMedicine()" id="medicineBtn">🔍 Find Medicine</button>
+            </div>
+            <div id="medicineResults" class="results-list">
+                <div style="text-align:center;padding:60px;color:rgba(255,255,255,0.7);">
+                    <i class="fas fa-pills" style="font-size:4em;margin-bottom:20px;"></i>
+                    <h3>Search medicines or pharmacies</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pulse Modal -->
+    <div id="pulseModal" class="modal">
+        <div class="modal-content pulse-modal">
+            <span class="close" onclick="closeModal('pulseModal')">&times;</span>
+            <h2 id="pulseModalTitle">💓 Pulse Checker</h2>
+            <div class="pulse-container">
+                <video id="pulseVideo" autoplay muted playsinline style="display:none;"></video>
+                <canvas id="pulseCanvas" style="display:none;"></canvas>
+                <div class="pulse-reading">
+                    <div id="pulseBPM" class="bpm-display">-- BPM</div>
+                    <div id="pulseStatus" class="pulse-status">Tap Start to check pulse</div>
+                </div>
+                <button id="startPulse" onclick="startPulseCheck()">🚀 Start Pulse Check</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SOS Success -->
+    <div id="sosModal" class="modal sos-success">
+        <div class="modal-content">
+            <i class="fas fa-check-circle success-icon"></i>
+            <h2 id="sosSuccessTitle">SOS Activated!</h2>
+            <p id="sosSuccessMsg">Alert sent to 5 nearest hospitals & 3 ambulance services</p>
+            <div class="emergency-contacts">
+                <p>📞 Emergency Numbers Active:</p>
+                <p><span class="emergency-number">🚨 108</span> 
+                   <span class="emergency-number">🚑 102</span> 
+                   <span class="emergency-number">👮 100</span> 
+                   <span class="emergency-number">🚒 101</span></p>
+            </div>
+            <button onclick="closeModal('sosModal')" class="success-btn">✅ Help On Way!</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
